@@ -17,6 +17,12 @@ class App {
       const bonusNumberInput = await Console.readLineAsync("\n보너스 번호를 입력해 주세요.\n");
       const bonusNumber = parseInt(bonusNumberInput.trim(), 10);
 
+      // ✨ 3, 4번: LottoGame에서 반복 입력 처리
+      const winningLottoInstance = await game.getWinningNumbers();
+
+      // ✨ 5, 6번: WinningLotto 인스턴스 생성 시 보너스 번호 검증까지 처리됨
+      const fullWinningLotto = await game.getBonusNumber(winningLottoInstance);
+
       // 10~14번 기능 실행
       game.calculateAndPrintResults(winningNumbers, bonusNumber);
 

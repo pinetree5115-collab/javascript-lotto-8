@@ -22,13 +22,30 @@ class LottoGame {
   }
 
   // 1, 2번 기능: 구입 금액 입력 및 검증 로직 (반복 입력 처리 포함)
-  async getPurchaseAmount() {
+  // 3, 4번 기능: 당첨 번호 입력 및 검증 (반복 처리)
+  async getWinningNumbers() {
     while (true) {
       try {
-        const input = await Console.readLineAsync("구입금액을 입력해 주세요.\n");
-        const amount = this.validateAmount(input);
-        this.purchaseAmount = amount;
-        return;
+        const input = await Console.readLineAsync("\n당첨 번호를 입력해 주세요.\n");
+        const numbers = input.split(',').map(n => parseInt(n.trim(), 10));
+
+        // 4. 유효성 검증: Lotto 객체 생성 시 검증이 자동으로 실행됨
+        return new Lotto(numbers);
+      } catch (error) {
+        Console.print(error.message);
+      }
+    }
+  }
+
+  // 5, 6번 기능: 보너스 번호 입력 및 검증 (반복 처리)
+  async getBonusNumber(winningLotto) {
+    while (true) {
+      try {
+        const input = await Console.readLineAsync("\n보너스 번호를 입력해 주세요.\n");
+        const number = parseInt(input.trim(), 10);
+
+        // 6. 유효성 검증: WinningLotto 생성자를 통해 검증이 실행됨
+        return new WinningLotto(winningLotto.getNumbers(), number);
       } catch (error) {
         Console.print(error.message);
       }
