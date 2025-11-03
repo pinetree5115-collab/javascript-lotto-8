@@ -1,9 +1,18 @@
-// src/LottoGame.js
 
 import { Console, Random } from "@woowacourse/mission-utils";
 import Lotto from "./Lotto.js";
+import WinningLotto, { PRIZES } from "./WinningLotto.js";
 
 const LOTTO_PRICE = 1000;
+
+// 당첨 내역 초기화 및 출력 순서를 정의합니다.
+const INITIAL_STATS = {
+  [PRIZES.FIFTH.label]: 0,
+  [PRIZES.FOURTH.label]: 0,
+  [PRIZES.THIRD.label]: 0,
+  [PRIZES.SECOND.label]: 0,
+  [PRIZES.FIRST.label]: 0,
+};
 
 class LottoGame {
   constructor() {
@@ -53,7 +62,51 @@ class LottoGame {
     }
   }
 
-  // ...
+
+class LottoGame {
+  // ... (constructor, getPurchaseAmount, issueLottos는 그대로)
+
+  // 12, 13번 기능: 당첨 통계 계산 및 출력
+  calculateAndPrintResults(winningNumbers, bonusNumber) {
+    const winningLotto = new WinningLotto(winningNumbers, bonusNumber);
+    const stats = this.lottos.reduce((acc, lotto) => {
+      const rank = winningLotto.rank(lotto);
+      if (rank) {
+        acc[rank.label] += 1;
+      }
+      return acc;
+    }, { ...INITIAL_STATS }); // 초기 통계 객체 복사
+
+    this.printWinningStats(stats); // 당첨 내역 출력
+    this.printProfitRate(stats);   // 수익률 출력
+  }
+
+  // 12번 기능: 당첨 내역 출력
+  printWinningStats(stats) {
+    Console.print('\n당첨 통계');
+    Console.print('---');
+    Object.keys(INITIAL_STATS).forEach(label => {
+      Console.print(`${label} - ${stats[label]}개`);
+    });
+  }
+
+  // 14번 기능: 수익률 계산 및 출력
+  printProfitRate(stats) {
+    let totalRevenue = 0;
+    Object.keys(stats).forEach(label => {
+      const prize = Object.values(PRIZES).find(p => p.label === label);
+      totalRevenue += stats[label] * prize.amount;
+    });
+
+    const profitRate = (totalRevenue / this.purchaseAmount) * 100;
+
+    // 수익률 소수점 둘째 자리에서 반올림
+    const roundedRate = Math.round(profitRate * 10) / 10;
+    Console.print(`총 수익률은 ${roundedRate.toLocaleString('ko-KR')}%입니다.`);
+  }
+
+  // ... (나머지 로직은 그대로)
+}
 }
 
 export default LottoGame;

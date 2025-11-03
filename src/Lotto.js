@@ -25,6 +25,21 @@ class Lotto {
     return this.#numbers;
   }
 
+  // 10번 기능: 당첨 번호와의 일치 개수 및 보너스 번호 일치 여부 계산
+  getMatchResult(winningLotto, bonusNumber) {
+    const winningNumbers = winningLotto.getNumbers();
+
+    // 일치 개수 계산
+    const matchCount = this.#numbers.filter(number =>
+      winningNumbers.includes(number)
+    ).length;
+
+    // 보너스 번호 일치 여부
+    const bonusMatch = this.#numbers.includes(bonusNumber);
+
+    return { matchCount, bonusMatch };
+  }
+
   // ... (나중에 추가할예정)
 }
 
