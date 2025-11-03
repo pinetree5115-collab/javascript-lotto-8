@@ -23,14 +23,19 @@ class LottoGame {
 
   // 1, 2번 기능: 구입 금액 입력 및 검증 로직 (반복 입력 처리 포함)
   // 3, 4번 기능: 당첨 번호 입력 및 검증 (반복 처리)
-  async getWinningNumbers() {
+  // 5번 기능: 보너스 번호 입력 및 기본 유효성 검증 (반복 처리)
+  async getBonusNumberValue() {
     while (true) {
       try {
-        const input = await Console.readLineAsync("\n당첨 번호를 입력해 주세요.\n");
-        const numbers = input.split(',').map(n => parseInt(n.trim(), 10));
+        const input = await Console.readLineAsync("\n보너스 번호를 입력해 주세요.\n");
+        const number = parseInt(input.trim(), 10);
 
-        // 4. 유효성 검증: Lotto 객체 생성 시 검증이 자동으로 실행됨
-        return new Lotto(numbers);
+        // 기본 유효성 검증 (숫자형, 1~45 범위)
+        if (isNaN(number) || number < 1 || number > 45) {
+          // WinningLotto.js의 에러 메시지를 재사용하거나 적절한 에러를 던집니다.
+          throw new Error("[ERROR] 로또 번호는 1부터 45 사이의 숫자여야 합니다.");
+        }
+        return number;
       } catch (error) {
         Console.print(error.message);
       }
